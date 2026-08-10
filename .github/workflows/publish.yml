@@ -1,0 +1,242 @@
+name: publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      semver:
+        description: Release bump type
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - finalize
+      publish_to_github_release:
+        description: Create a GitHub release for the bumped tag
+        required: true
+        default: true
+        type: boolean
+      publish_to_pypi:
+        description: Publish the built distributions to PyPI
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag-name: ${{ steps.release_meta.outputs.tag-name }}
+      release-name: ${{ steps.release_meta.outputs.release-name }}
+      release-notes: ${{ steps.release_meta.outputs.release-notes }}
+      release-ref: ${{ steps.commit.outputs.release-ref }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Bump package version
+        id: version
+        shell: bash
+        run: |
+          version="$(python scripts/bump_version.py --bump "${{ inputs.semver }}" --write)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Sync packaged docs
+        run: python scripts/sync_packaged_docs.py
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Run unit tests
+        shell: bash
+        run: |
+          uv run python -m unittest discover -s tests -v
+
+      - name: Prepare release metadata
+        id: release_meta
+        shell: bash
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          tag="v${version}"
+          {
+            echo "version=$version"
+            echo "tag-name=$tag"
+            echo "release-name=$tag"
+            echo "release-notes=release-notes.md"
+          } >> "$GITHUB_OUTPUT"
+          python - <<'PY'
+          from pathlib import Path
+
+          version = Path("pyproject.toml").read_text(encoding="utf-8")
+          target = "${{ steps.version.outputs.version }}"
+          if target not in version:
+              raise SystemExit("version not found in pyproject.toml")
+          changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
+          start = changelog.find(f"## {target}")
+          if start == -1:
+              notes = f"federated-identity-governance-pack release {target}\n"
+          else:
+              rest = changelog[start:].splitlines()
+              collected = []
+              for line in rest[1:]:
+                  if line.startswith("## "):
+                      break
+                  collected.append(line)
+              body = "\n".join(collected).strip()
+              notes = body + "\n" if body else f"federated-identity-governance-pack release {target}\n"
+          Path("release-notes.md").write_text(notes, encoding="utf-8")
+          PY
+
+      - name: Upload release notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: ${{ steps.release_meta.outputs.release-notes }}
+
+      - name: Commit version bump
+        id: commit
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pyproject.toml CHANGELOG.md src/federated_identity_governance_pack/templates
+          git commit -m "chore(release): bump version to ${{ steps.version.outputs.version }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+          echo "release-ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  build-dist:
+    runs-on: ubuntu-latest
+    needs: prepare-release
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare-release.outputs.release-ref }}
+
+      - name: Sync packaged docs
+        run: python scripts/sync_packaged_docs.py
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Build package
+        run: uv build --project "." --out-dir dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-dist
+          path: dist
+
+
+  pack-compatibility:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare-release
+      - build-dist
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare-release.outputs.release-ref }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run downstream pack sync gate
+        run: python scripts/validate_pack_compatibility.py --wheel dist/*.whl
+
+  push-tag:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare-release
+      - build-dist
+      - pack-compatibility
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare-release.outputs.release-ref }}
+          fetch-depth: 0
+
+      - name: Create and push release tag
+        shell: bash
+        run: |
+          git tag "${{ needs.prepare-release.outputs.tag-name }}"
+          git push origin "${{ needs.prepare-release.outputs.tag-name }}"
+
+  github-release:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare-release
+      - build-dist
+      - pack-compatibility
+      - push-tag
+    if: ${{ inputs.publish_to_github_release }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare-release.outputs.release-ref }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-notes
+          path: .
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare-release.outputs.tag-name }}
+          name: ${{ needs.prepare-release.outputs.release-name }}
+          body_path: ${{ needs.prepare-release.outputs.release-notes }}
+          files: dist/*
+
+  pypi-publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    needs:
+      - prepare-release
+      - build-dist
+      - pack-compatibility
+      - push-tag
+    if: ${{ inputs.publish_to_pypi }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare-release.outputs.release-ref }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist

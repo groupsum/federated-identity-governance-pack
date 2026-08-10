@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "spec",
+  "id": "spc:saml-assertion-validation-profile-contract",
+  "number": 2003,
+  "slug": "saml-assertion-validation-profile-contract",
+  "title": "SAML Assertion Validation Profile Contract",
+  "status": "accepted",
+  "origin": "extension-pack",
+  "summary": "Defines SAML assertion signature, subject, condition, audience, and replay validation.",
+  "body": "## Requirements\n\n- Validate issuer, signature, audience, time conditions, and subject confirmation.\n- Bind assertions to the intended relying party transaction.\n- Detect assertion replay and duplicate use.",
+  "decision_date": "2026-08-10",
+  "references": [
+    "https://pages.nist.gov/800-63-4/sp800-63c.html",
+    "https://openid.net/specs/openid-connect-core-1_0.html",
+    "https://docs.oasis-open.org/security/saml/v2.0/"
+  ],
+  "supersedes": [],
+  "superseded_by": [],
+  "status_notes": [],
+  "tags": [
+    "federation",
+    "fal",
+    "oidc",
+    "saml",
+    "identity-provider"
+  ],
+  "spec_kind": "governance",
+  "adr_ids": [
+    "adr:fal-governs-federation-assertion-protection",
+    "adr:federation-assertions-carry-identity-facts-not-application-permissions",
+    "adr:federation-trust-metadata-and-key-rotation-are-explicit",
+    "adr:subject-identifiers-and-attribute-release-are-profiled"
+  ]
+}

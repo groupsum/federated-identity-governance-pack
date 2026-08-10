@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "adr",
+  "id": "adr:federation-assertions-carry-identity-facts-not-application-permissions",
+  "number": 1001,
+  "slug": "federation-assertions-carry-identity-facts-not-application-permissions",
+  "title": "Federation Assertions Carry Identity Facts Not Application Permissions",
+  "status": "accepted",
+  "origin": "extension-pack",
+  "summary": "Federation assertions carry authentication and identity facts but do not decide application permissions.",
+  "body": "Federation assertions carry authentication and identity facts but do not decide application permissions.",
+  "decision_date": "2026-08-10",
+  "references": [
+    "https://pages.nist.gov/800-63-4/sp800-63c.html",
+    "https://openid.net/specs/openid-connect-core-1_0.html",
+    "https://docs.oasis-open.org/security/saml/v2.0/"
+  ],
+  "supersedes": [],
+  "superseded_by": [],
+  "status_notes": [],
+  "tags": [
+    "federation",
+    "fal",
+    "oidc",
+    "saml",
+    "identity-provider"
+  ]
+}

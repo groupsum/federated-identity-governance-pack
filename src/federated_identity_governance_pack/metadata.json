@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "ssot_package_name": "federated-identity-governance-pack",
+  "origin": {
+    "id": "pack:federated-identity",
+    "package_name": "federated-identity-governance-pack",
+    "import_name": "federated_identity_governance_pack",
+    "kind": "governance-pack",
+    "title": "Federated Identity Governance",
+    "description": "Governance for federation assurance, IdP and RP trust, OIDC and SAML assertions, metadata, keys, subject identifiers, attribute release, and federation audit evidence.",
+    "homepage": "https://github.com/groupsum/federated-identity-governance-pack",
+    "repository": "https://github.com/groupsum/federated-identity-governance-pack"
+  },
+  "compatibility": {
+    "python": ">=3.10,<3.15",
+    "ssot_registry_schema": ">=0.4.0",
+    "ssot_pack_contract": ">=0.2.17,<0.3.0"
+  },
+  "trust": {
+    "trusted_by_default": false,
+    "origin": "extension-pack",
+    "reservation_owner": "extension-pack:federated-identity-governance-pack"
+  },
+  "documents": {
+    "adr": {
+      "manifest_path": "templates/adr/manifest.json"
+    },
+    "spec": {
+      "manifest_path": "templates/specs/manifest.json"
+    }
+  }
+}

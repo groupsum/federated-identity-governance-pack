@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "adr",
+  "id": "adr:fal-governs-federation-assertion-protection",
+  "number": 1000,
+  "slug": "fal-governs-federation-assertion-protection",
+  "title": "FAL Governs Federation Assertion Protection",
+  "status": "accepted",
+  "origin": "extension-pack",
+  "summary": "FAL governs assertion protection and federation transactions rather than proofing or permissions.",
+  "body": "FAL governs assertion protection and federation transactions rather than proofing or permissions.",
+  "decision_date": "2026-08-10",
+  "references": [
+    "https://pages.nist.gov/800-63-4/sp800-63c.html",
+    "https://openid.net/specs/openid-connect-core-1_0.html",
+    "https://docs.oasis-open.org/security/saml/v2.0/"
+  ],
+  "supersedes": [],
+  "superseded_by": [],
+  "status_notes": [],
+  "tags": [
+    "federation",
+    "fal",
+    "oidc",
+    "saml",
+    "identity-provider"
+  ]
+}

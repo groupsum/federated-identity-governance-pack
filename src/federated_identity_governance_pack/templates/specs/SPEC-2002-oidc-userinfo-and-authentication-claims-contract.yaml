@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "spec",
+  "id": "spc:oidc-userinfo-and-authentication-claims-contract",
+  "number": 2002,
+  "slug": "oidc-userinfo-and-authentication-claims-contract",
+  "title": "OIDC Userinfo And Authentication Claims Contract",
+  "status": "accepted",
+  "origin": "extension-pack",
+  "summary": "Defines OIDC UserInfo, subject correlation, and authentication-claim handling.",
+  "body": "## Requirements\n\n- Require consistent subject identifiers across ID Token and UserInfo.\n- Treat acr, amr, and auth_time as authentication facts.\n- Do not translate identity claims directly into application permissions.",
+  "decision_date": "2026-08-10",
+  "references": [
+    "https://pages.nist.gov/800-63-4/sp800-63c.html",
+    "https://openid.net/specs/openid-connect-core-1_0.html",
+    "https://docs.oasis-open.org/security/saml/v2.0/"
+  ],
+  "supersedes": [],
+  "superseded_by": [],
+  "status_notes": [],
+  "tags": [
+    "federation",
+    "fal",
+    "oidc",
+    "saml",
+    "identity-provider"
+  ],
+  "spec_kind": "governance",
+  "adr_ids": [
+    "adr:fal-governs-federation-assertion-protection",
+    "adr:federation-assertions-carry-identity-facts-not-application-permissions",
+    "adr:federation-trust-metadata-and-key-rotation-are-explicit",
+    "adr:subject-identifiers-and-attribute-release-are-profiled"
+  ]
+}
