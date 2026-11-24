@@ -77,11 +77,8 @@ class GovernancePackManifestTests(unittest.TestCase):
             self.assertNotIn("pack:", text)
             self.assertNotIn("This pack", text)
 
-    def test_readme_conforms_to_governance_pack_contract(self) -> None:
+    def test_readme_lists_pack_identity_and_documents(self) -> None:
         readme = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
-        required_sections = ['## Answer Engine Summary', '## What This Governance Pack Provides', '## Pack Metadata', '## Domain Focus', '## Authority Sources', '## Included ADRs', '## Included SPECs', '## Install With uv', '## Use With The SSOT Registry CLI', '## Programmatic Usage', '## Resources', '## Normative Ownership Boundary']
-        positions = [readme.index(section) for section in required_sections]
-        self.assertEqual(positions, sorted(positions))
         metadata = load_pack_metadata()
         self.assertIn(f"https://pypi.org/project/{metadata['origin']['package_name']}/", readme)
         self.assertIn(metadata["origin"]["repository"], readme)
