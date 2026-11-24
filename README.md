@@ -5,7 +5,7 @@
 <p align="center"><strong>federated-identity-governance-pack</strong></p>
 <p align="center">Governance for federation assurance, IdP and RP trust, OIDC and SAML assertions, metadata, keys, subject identifiers, attribute release, and federation audit evidence.</p>
 <p align="center">
-<a href="https://pypi.org/project/federated-identity-governance-pack/"><img alt="pypi: federated-identity-governance-pack unpublished" src="https://img.shields.io/static/v1?label=pypi&amp;message=federated-identity-governance-pack%20unpublished&amp;labelColor=1E293B&amp;color=92400E"></a>
+<a href="https://pypi.org/project/federated-identity-governance-pack/"><img alt="pypi: federated-identity-governance-pack" src="https://img.shields.io/pypi/v/federated-identity-governance-pack?labelColor=1E293B&amp;color=1D4ED8"></a>
 <a href="https://github.com/groupsum/federated-identity-governance-pack/blob/master/pyproject.toml"><img alt="Source version: 0.1.0.dev2" src="https://img.shields.io/static/v1?label=Source%20version&amp;message=0.1.0.dev2&amp;labelColor=1E293B&amp;color=4338CA"></a>
 <a href="https://github.com/groupsum/federated-identity-governance-pack/blob/master/pyproject.toml"><img alt="Python: &gt;=3.10,&lt;3.15" src="https://img.shields.io/static/v1?label=Python&amp;message=%3E%3D3.10%2C%3C3.15&amp;labelColor=1E293B&amp;color=0F766E"></a>
 <a href="https://github.com/groupsum/federated-identity-governance-pack/blob/master/pyproject.toml"><img alt="Layer: governance" src="https://img.shields.io/static/v1?label=Layer&amp;message=governance&amp;labelColor=1E293B&amp;color=6D28D9"></a>
@@ -14,7 +14,7 @@
 <a href="https://github.com/groupsum/federated-identity-governance-pack/blob/master/README.md#notices"><img alt="Notice: not required" src="https://img.shields.io/static/v1?label=Notice&amp;message=not%20required&amp;labelColor=1E293B&amp;color=475569"></a>
 </p>
 <p align="center">
-<a href="https://pypi.org/project/federated-identity-governance-pack/"><img alt="pypi downloads: federated-identity-governance-pack: unpublished" src="https://img.shields.io/static/v1?label=pypi%20downloads&amp;message=federated-identity-governance-pack%3A%20unpublished&amp;labelColor=1E293B&amp;color=92400E"></a>
+<a href="https://pypi.org/project/federated-identity-governance-pack/"><img alt="Monthly PyPI downloads: federated-identity-governance-pack" src="https://img.shields.io/pypi/dm/federated-identity-governance-pack?labelColor=1E293B&amp;color=0E7490"></a>
 <a href="https://github.com/groupsum/federated-identity-governance-pack/blob/master/README.md"><img alt="README hits: federated-identity-governance-pack" src="https://hits.sh/github.com/groupsum/federated-identity-governance-pack/README.md.svg?label=README%20hits&amp;labelColor=1E293B&amp;color=0E7490"></a>
 </p>
 <p align="center">
@@ -75,33 +75,29 @@ Use Python `>=3.10,<3.15`. Downstream synchronization also requires SSOT Registr
 
 ### Installation
 
+For a reproducible install of the [first PyPI prerelease](https://pypi.org/project/federated-identity-governance-pack/0.1.0.dev2/), use `python -m pip install federated-identity-governance-pack==0.1.0.dev2`.
+
 #### uv
 
 <!-- readme-standards:begin installation.uv -->
-`federated-identity-governance-pack` is not declared published. From the source checkout:
-
 ```bash
-uv pip install .
+uv add federated-identity-governance-pack
 ```
 <!-- readme-standards:end installation.uv -->
 
 #### pip
 
 <!-- readme-standards:begin installation.pip -->
-`federated-identity-governance-pack` is not declared published. From the source checkout:
-
 ```bash
-python -m pip install .
+python -m pip install federated-identity-governance-pack
 ```
 <!-- readme-standards:end installation.pip -->
 
 #### Poetry
 
 <!-- readme-standards:begin installation.poetry -->
-`federated-identity-governance-pack` is not declared published. From a separate Poetry project, replace the path with your checkout:
-
 ```bash
-poetry add /path/to/federated-identity-governance-pack
+poetry add federated-identity-governance-pack
 ```
 <!-- readme-standards:end installation.poetry -->
 
@@ -289,7 +285,7 @@ Install the checkout with `python -m pip install -e .`, then run `python -m unit
 
 ### Notes for Maintainers
 
-Keep source links, document identifiers, and committed manifest hashes aligned. Run `uvx --from readme-standards==0.1.3 readme-standards render --write` after changing generated README inputs. Update the PyPI publication setting after the first successful upload.
+Keep source links, document identifiers, and committed manifest hashes aligned. Run `uvx --from readme-standards==0.1.3 readme-standards render --write` after changing generated README inputs.
 
 ---
 
