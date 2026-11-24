@@ -1,0 +1,2 @@
+src/**/templates/**/*.yaml text eol=lf
+src/**/templates/**/*.json text eol=lf
