@@ -76,7 +76,7 @@ license_file = "LICENSE"
 
 [tool.readme_standards.distributions.pypi]
 name = "federated-identity-governance-pack"
-published = false
+published = true
 
 [tool.readme_standards.examples.quick_start]
 source = "examples/quick_start.py"
