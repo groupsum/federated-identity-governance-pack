@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "federated-identity-governance-pack"
-version = "0.1.0.dev1"
+version = "0.1.0.dev2"
 description = "Governance for federation assurance, IdP and RP trust, OIDC and SAML assertions, metadata, keys, subject identifiers, attribute release, and federation audit evidence."
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
